@@ -142,3 +142,7 @@ iexp.py
 
 # local test data
 data/
+
+# PDM files
+.pdm-python
+.pdm-build/

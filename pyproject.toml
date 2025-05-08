@@ -1,0 +1,55 @@
+[project]
+name = "hentai"
+version = "3.2.10"
+description = "Implements a wrapper class around nhentai's RESTful API."
+authors = [
+    { name = "Alejandro González Momblán", email = "agelrenorenardo@gmail.com" },
+    { name = "hentai-chan", email = "dev.hentai-chan@outlook.com" },
+]
+dependencies = [
+    "requests>=2.27.1",
+    "tqdm>=4.63.0",
+]
+requires-python = ">=3.7"
+readme = "README.md"
+license = { text = "General Public License V3" }
+keywords = [
+    "hentai nhentai nhentai.net API NSFW",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Education",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://www.hentai-chan.dev/projects/hentai"
+Documentation = "https://www.hentai-chan.dev/projects/hentai"
+"Source Code" = "https://github.com/hentai-chan/hentai"
+"Bug Reports" = "https://github.com/hentai-chan/hentai/issues"
+Changelog = "https://github.com/hentai-chan/hentai/blob/master/CHANGELOG.md"
+
+[project.scripts]
+nhentai = "hentai.__init__:main"
+
+[project.optional-dependencies]
+types = [
+    "types-requests>=2.32.0.20250328",
+    "types-tqdm>=4.67.0.20250417",
+]
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+package-dir = "src"
