@@ -16,7 +16,7 @@ class TestPage(unittest.TestCase):
         cls.cover.filename.unlink()
 
     def test_filename(self):
-        self.assertEqual('1.jpg', str(self.cover.filename), msg=f"Wrong filename: {self.cover.filename!r}")
+        self.assertEqual('1.webp', str(self.cover.filename), msg=f"Wrong filename: {self.cover.filename!r}")
 
     def test_download(self):
         self.cover.download(self.test_response.handler)

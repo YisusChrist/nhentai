@@ -91,7 +91,7 @@ class TestHentai(unittest.TestCase):
         # comment
         self.assertEqual(first.id, 3946064, msg="Comment ID")
         self.assertEqual(first.gallery_id, self.test_response.id, msg="Gallery ID")
-        self.assertAlmostEqual(first.post_date, dt(2016, 10, 18, 14, 59, 25, tzinfo=timezone.utc), msg="Post Date")
+        self.assertEqual(first.post_date, dt(2016, 10, 18, 14, 59, 25, tzinfo=timezone.utc), msg="Post Date")
         self.assertEqual(first.body, "well depressing from the start but end up as a happy ending", msg="Message")
         # poster
         self.assertEqual(first.poster.id, 572666, msg="User ID")
