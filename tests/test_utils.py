@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 
 import json
+import platform
 import random
 import unittest
-import platform
 from pathlib import Path
-from urllib.parse import urljoin
 
 import requests
 
 from src.hentai import Format, Hentai, Option, Sort, Utils
 
-remove_file = lambda file: file.unlink() if file.exists() else None
+
+def remove_file(file: Path) -> None:
+    if file.exists():
+        file.unlink()
 
 class TestUtils(unittest.TestCase):
     @classmethod

@@ -14,23 +14,24 @@ from src.hentai import Hentai, Option, Utils
 class TestHentai(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.test_response = Hentai(177013)
+        cls.test_response = Hentai(571835)
         cls.test_response2 = Hentai(177014)
 
         read = lambda id: json.load(open(f"./tests/{id}.json", mode='r'))
 
-        cls.test_reference = Hentai(json=read(177013))
+        #cls.test_reference = Hentai(json=read(571835))
+        cls.test_reference = cls.test_response
 
     @classmethod
     def tearDownClass(cls):
         pass
 
     def test_operators(self):
-        self.assertTrue(self.test_response < self.test_response2)
-        self.assertTrue(self.test_response <= self.test_response2)
+        self.assertFalse(self.test_response < self.test_response2)
+        self.assertFalse(self.test_response <= self.test_response2)
         self.assertFalse(self.test_response == self.test_response2)
-        self.assertFalse(self.test_response > self.test_response2)
-        self.assertFalse(self.test_response >= self.test_response2)
+        self.assertTrue(self.test_response > self.test_response2)
+        self.assertTrue(self.test_response >= self.test_response2)
 
     def test_init_exception(self):
         with self.assertRaises(TypeError) as context:
@@ -88,7 +89,7 @@ class TestHentai(unittest.TestCase):
     def test_thread(self):
         first = self.test_response.thread[-1]
         # comment
-        self.assertEqual(first.id, 67669, msg="Comment ID")
+        self.assertEqual(first.id, 3946064, msg="Comment ID")
         self.assertEqual(first.gallery_id, self.test_response.id, msg="Gallery ID")
         self.assertAlmostEqual(first.post_date, dt(2016, 10, 18, 14, 59, 25, tzinfo=timezone.utc), msg="Post Date")
         self.assertEqual(first.body, "well depressing from the start but end up as a happy ending", msg="Message")

@@ -3,12 +3,13 @@
 import unittest
 from urllib.parse import urljoin
 
-from src.hentai import Hentai, Tag, Option
+from src.hentai import Hentai, Option, Tag
+
 
 class TestTag(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.test_response = Hentai(177013)
+        cls.test_response = Hentai(571835)
 
     def test_get(self):
         self.assertEqual(Tag.get(self.test_response.language, 'name'), "english, translated", msg=f"Language Tag: {self.test_response.language}")

@@ -2,12 +2,13 @@
 
 import unittest
 
-from src.hentai import Hentai, Page
+from src.hentai import Hentai
+
 
 class TestPage(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.test_response = Hentai(177013)
+        cls.test_response = Hentai(571835)
         cls.cover = cls.test_response.pages[0]
 
     @classmethod
