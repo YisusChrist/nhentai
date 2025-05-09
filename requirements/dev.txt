@@ -1,4 +1,0 @@
--r release.txt
-check-manifest==0.48
-pytest==7.1.1
-

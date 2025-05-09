@@ -6,16 +6,11 @@ authors = [
     { name = "Alejandro González Momblán", email = "agelrenorenardo@gmail.com" },
     { name = "hentai-chan", email = "dev.hentai-chan@outlook.com" },
 ]
-dependencies = [
-    "requests>=2.27.1",
-    "tqdm>=4.63.0",
-]
+dependencies = ["requests>=2.27.1", "tqdm>=4.63.0"]
 requires-python = ">=3.7"
 readme = "README.md"
 license = { text = "General Public License V3" }
-keywords = [
-    "hentai nhentai nhentai.net API NSFW",
-]
+keywords = ["hentai nhentai nhentai.net API NSFW"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -43,10 +38,8 @@ Changelog = "https://github.com/hentai-chan/hentai/blob/master/CHANGELOG.md"
 nhentai = "hentai.__init__:main"
 
 [project.optional-dependencies]
-types = [
-    "types-requests>=2.32.0.20250328",
-    "types-tqdm>=4.67.0.20250417",
-]
+dev = ["pytest>=8.3.5", "check-manifest>=0.50"]
+types = ["types-requests>=2.32.0.20250328", "types-tqdm>=4.67.0.20250417"]
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
