@@ -87,17 +87,17 @@ class TestHentai(unittest.TestCase):
         self.assertEqual(len(self.test_response.related), 5, msg="Expected five related doujins as response.")
 
     def test_thread(self):
-        first = self.test_response.thread[-1]
+        first = self.test_response2.thread[-1]
         # comment
-        self.assertEqual(first.id, 3946064, msg="Comment ID")
-        self.assertEqual(first.gallery_id, self.test_response.id, msg="Gallery ID")
-        self.assertEqual(first.post_date, dt(2016, 10, 18, 14, 59, 25, tzinfo=timezone.utc), msg="Post Date")
-        self.assertEqual(first.body, "well depressing from the start but end up as a happy ending", msg="Message")
+        self.assertEqual(first.id, 1006454, msg="Comment ID")
+        self.assertEqual(first.gallery_id, self.test_response2.id, msg="Gallery ID")
+        self.assertEqual(first.post_date, dt(2020, 6, 14, 19, 53, 27, tzinfo=timezone.utc), msg="Post Date")
+        self.assertEqual(first.body, "Poor soul. It seems you are lost. The one you're looking for is only just a number behind. Take care. ", msg="Message")
         # poster
-        self.assertEqual(first.poster.id, 572666, msg="User ID")
-        self.assertEqual(first.poster.username, "devil_arm", msg="User ID")
-        self.assertEqual(first.poster.slug, "devil_arm", msg="User ID")
-        self.assertEqual(first.poster.avatar_url, "i.nhentai.net/avatars/572666.png", msg="User ID")
+        self.assertEqual(first.poster.id, 1562493, msg="User ID")
+        self.assertEqual(first.poster.username, "helogram", msg="User ID")
+        self.assertEqual(first.poster.slug, "helogram", msg="User ID")
+        self.assertEqual(first.poster.avatar_url.split("?")[0], "i.nhentai.net/avatars/1562493.png", msg="User ID")
         self.assertFalse(first.poster.is_superuser, msg="Super User Role")
         self.assertFalse(first.poster.is_staff, msg="Staff Member Role")
 
