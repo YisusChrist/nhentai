@@ -8,7 +8,10 @@ from pathlib import Path
 
 import requests
 
-from src.hentai import Format, Hentai, Option, Sort, Utils
+from src.hentai import Format, Hentai, Option, Sort
+from src.hentai.api.homepage import browse_homepage, get_homepage
+from src.hentai.api.search import search_all_by_query, search_by_tag
+from src.hentai.api.utils import download, get_random_hentai
 
 
 def remove_file(file: Path) -> None:
@@ -29,17 +32,17 @@ class TestUtils(unittest.TestCase):
         remove_file(cls.tiny_evil_zip)
 
     def test_random_hentai(self):
-        random_hentai = Utils.get_random_hentai()
+        random_hentai = get_random_hentai()
         response = requests.get(random_hentai.url)
         self.assertEqual(response.status_code, 200, msg=f"Failing URL: {response.url} (status code: {response.status_code})")
 
     def test_download_queue(self):
-        Utils.download([self.tiny_evil], progressbar=True, zip_dir=True)
+        download([self.tiny_evil], progressbar=True, zip_dir=True)
         self.assertFalse(self.tiny_evil_dir.is_dir())
         self.assertTrue(self.tiny_evil_zip.is_file())
 
     def test_get_homepage(self):
-        homepage = Utils.get_homepage().popular_now
+        homepage = get_homepage().popular_now
         for doujin in homepage:
             self.assertIsNotNone(doujin.json, msg="Result should not be 'None'.")
             self.assertTrue(doujin.id, msg="ValueError: ID")
@@ -53,11 +56,11 @@ class TestUtils(unittest.TestCase):
 
     def test_browse_homepage_exception(self):
         with self.assertRaises(ValueError) as context:
-            Utils.browse_homepage(start_page=5, end_page=1)
+            browse_homepage(start_page=5, end_page=1)
         self.assertTrue('Start page number should not exceed end page number', context.exception)
 
     def test_search_by_tag(self):
-        holo_doujins = Utils.search_by_tag(33918, sort=Sort.PopularWeek)
+        holo_doujins = search_by_tag(33918, sort=Sort.PopularWeek)
         for doujin in holo_doujins:
             self.assertIsNotNone(doujin.json, msg="Result should not be 'None'.")
             self.assertTrue(doujin.id, msg="ValueError: ID")
@@ -70,7 +73,7 @@ class TestUtils(unittest.TestCase):
             self.assertTrue(doujin.num_pages, msg="ValueError: NumberOfPages")
 
     def test_search_all_by_query(self):
-        popular_3d = Utils.search_all_by_query(query="tag:3d", sort=Sort.PopularWeek)
+        popular_3d = search_all_by_query(query="tag:3d", sort=Sort.PopularWeek)
         for doujin in popular_3d:
             self.assertIsNotNone(doujin.json, msg="Result should not be 'None'.")
             self.assertTrue(doujin.id, msg="ValueError: ID")

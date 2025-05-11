@@ -4,6 +4,7 @@ import unittest
 from urllib.parse import urljoin
 
 from src.hentai import Hentai, Option, Tag
+from src.hentai.consts import HOME_URL
 
 
 class TestTag(unittest.TestCase):
@@ -26,7 +27,7 @@ class TestTag(unittest.TestCase):
                 self.assertEqual(character.id, 33918)
                 self.assertEqual(character.type, 'character')
                 self.assertEqual(character.name, 'holo')
-                self.assertEqual(character.url, urljoin(Hentai.HOME, '/character/holo/'))
+                self.assertEqual(character.url, urljoin(HOME_URL, '/character/holo/'))
                 self.assertEqual(character.count, 160)
                 break
 
