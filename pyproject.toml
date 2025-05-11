@@ -35,7 +35,7 @@ Documentation = "https://www.hentai-chan.dev/projects/hentai"
 Changelog = "https://github.com/hentai-chan/hentai/blob/master/CHANGELOG.md"
 
 [project.scripts]
-nhentai = "hentai.__init__:main"
+nhentai = "hentai.__main__:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.3.5", "check-manifest>=0.50"]
