@@ -14,11 +14,11 @@ from requests import HTTPError
 from requests.models import Response
 from tqdm import tqdm
 
-from hentai.consts import API_URL, COLORS, ERROR_VALUE, GALLERY_URL, HOME_URL
-from hentai.api.models import (Comment, Extension, Format, Option, Page,
-                                  Tag, User)
+from hentai.api.models import (Comment, Extension, Format, Option, Page, Tag,
+                               User)
 from hentai.api.progress import progressbar_options
 from hentai.api.utils import compress, export, get_random_cdn
+from hentai.consts import API_URL, COLORS, ERROR_VALUE, GALLERY_URL, HOME_URL
 from hentai.logs import logger
 from hentai.requests import RequestHandler
 
@@ -401,7 +401,7 @@ class Hentai(RequestHandler):
                 int(u["id"]),
                 u["username"],
                 u["slug"],
-                urljoin(f"i{cdn}.nhentai.net/", u["avatar_url"]),
+                urljoin(f"https://i{cdn}.nhentai.net/", u["avatar_url"]),
                 bool(u["is_superuser"]),
                 bool(u["is_staff"]),
             )
