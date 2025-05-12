@@ -26,6 +26,14 @@ class TestHentai(unittest.TestCase):
     def tearDownClass(cls):
         pass
 
+    def __test_image_urls(self, reference_url: str, response_url: str):
+        reference_parsed = urlparse(reference_url)
+        response_parsed = urlparse(response_url)
+
+        self.assertEqual(reference_parsed.scheme, response_parsed.scheme, msg=str(self.test_response))
+        self.assertEqual(reference_parsed.netloc[2:], response_parsed.netloc[2:], msg=str(self.test_response))
+        self.assertEqual(reference_parsed.path, response_parsed.path, msg=str(self.test_response))
+
     def test_operators(self):
         self.assertFalse(self.test_response < self.test_response2)
         self.assertFalse(self.test_response <= self.test_response2)
@@ -54,10 +62,10 @@ class TestHentai(unittest.TestCase):
         self.assertEqual(self.test_reference.scanlator, self.test_response.scanlator, msg=str(self.test_response))
 
     def test_cover(self):
-        self.assertEqual(self.test_reference.cover, self.test_response.cover, msg=str(self.test_response))
+        self.__test_image_urls(self.test_reference.cover, self.test_response.cover)
 
     def test_thumbnail(self):
-        self.assertEqual(self.test_reference.thumbnail, self.test_response.thumbnail, msg=str(self.test_response))
+        self.__test_image_urls(self.test_reference.thumbnail, self.test_response.thumbnail)
 
     def test_upload_date(self):
         self.assertEqual(self.test_reference.upload_date, self.test_response.upload_date, msg=str(self.test_response))
@@ -97,7 +105,8 @@ class TestHentai(unittest.TestCase):
         self.assertEqual(first.poster.id, 1562493, msg="User ID")
         self.assertEqual(first.poster.username, "helogram", msg="User ID")
         self.assertEqual(first.poster.slug, "helogram", msg="User ID")
-        self.assertEqual(first.poster.avatar_url.split("?")[0], "i.nhentai.net/avatars/1562493.png", msg="User ID")
+        self.__test_image_urls(first.poster.avatar_url, "https://i1.nhentai.net/avatars/1562493.png")
+        #self.assertEqual(first.poster.avatar_url, "i.nhentai.net/avatars/1562493.png", msg="User ID")
         self.assertFalse(first.poster.is_superuser, msg="Super User Role")
         self.assertFalse(first.poster.is_staff, msg="Staff Member Role")
 

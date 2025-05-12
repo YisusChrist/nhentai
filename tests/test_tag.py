@@ -10,10 +10,10 @@ from src.hentai.consts import HOME_URL
 class TestTag(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.test_response = Hentai(571835)
+        cls.test_response = Hentai(177014)
 
     def test_get(self):
-        self.assertEqual(Tag.get(self.test_response.language, 'name'), "english, translated", msg=f"Language Tag: {self.test_response.language}")
+        self.assertEqual(Tag.get(self.test_response.language, 'name'), "translated, chinese", msg=f"Language Tag: {self.test_response.language}")
 
     def test_get_exception(self):
         with self.assertRaises(ValueError) as context:
@@ -41,8 +41,13 @@ class TestTag(unittest.TestCase):
             Tag.list(Option.Category)
         self.assertTrue('Category Exception is not implemented', context.exception)
 
+    def test_empty_search(self):
+        artist = "nonexistentartist"
+        result = Tag.search(Option.Artist, 'name', artist, local_=True)
+        self.assertIsNone(result, msg=f"Search should return None for '{artist}' artist")
+
     def test_search(self):
-        result = Tag.search(Option.Artist, 'name', 'ramanda', local_=True)
+        result = Tag.search(Option.Artist, 'name', 'katase minami', local_=True)
         artist = self.test_response.artist[0]
         self.assertEqual(artist.id, result.id, msg="IDs should be an exact match")
         self.assertEqual(artist.type, result.type, msg="Types should be an exact match")
