@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 from hentai import __version__, package_name
+from hentai.consts import HOME_URL
 
 parser = None
 
@@ -53,7 +54,7 @@ def get_parsed_args() -> argparse.Namespace:
     subparser = parser.add_subparsers(dest="command")
 
     download_help_msg = (
-        "download a doujin from https://nhentai.net/ to your local harddrive"
+        f"download a doujin from {HOME_URL} to your local hard drive"
     )
     download_parser = subparser.add_parser(
         "download", description=download_help_msg, help=download_help_msg
