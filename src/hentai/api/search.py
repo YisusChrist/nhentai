@@ -2,10 +2,10 @@ from urllib.parse import urljoin
 
 from tqdm import tqdm
 
-from hentai.consts import HOME_URL
 from hentai.api.hentai import Hentai
 from hentai.api.models import Sort
 from hentai.api.progress import progressbar_options
+from hentai.consts import HOME_URL
 from hentai.requests import RequestHandler
 
 

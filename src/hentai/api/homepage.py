@@ -6,11 +6,11 @@ from urllib.parse import urljoin
 from requests import HTTPError
 from tqdm import tqdm
 
-from hentai.consts import COLORS, ERROR_VALUE, HOME_URL
 from hentai.api.hentai import Hentai
 from hentai.api.models import Homepage, Sort
 from hentai.api.progress import progressbar_options
 from hentai.api.search import search_by_query
+from hentai.consts import COLORS, ERROR_VALUE, HOME_URL
 from hentai.logs import logger
 from hentai.requests import RequestHandler
 

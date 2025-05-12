@@ -3,8 +3,8 @@ from collections import namedtuple
 from pathlib import Path
 from typing import List
 
-from hentai.consts import COLORS
 from hentai.api import Format, Hentai
+from hentai.consts import COLORS
 from hentai.logs import get_logfile_path
 
 

@@ -15,8 +15,8 @@ except AssertionError:
     )
 
 
+from hentai.api import *
 from hentai.command import (display_doujin_info, download_doujin,
                             handle_log_file)
 from hentai.consts import API_URL, GALLERY_URL, HOME_URL
-from hentai.api import *
 from hentai.logs import *
