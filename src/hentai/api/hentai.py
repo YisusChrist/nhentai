@@ -18,7 +18,7 @@ from hentai.consts import API_URL, COLORS, ERROR_VALUE, GALLERY_URL, HOME_URL
 from hentai.api.models import (Comment, Extension, Format, Option, Page,
                                   Tag, User)
 from hentai.api.progress import progressbar_options
-from hentai.api.utils import compress, export
+from hentai.api.utils import compress, export, get_random_cdn
 from hentai.logs import logger
 from hentai.requests import RequestHandler
 
@@ -225,7 +225,8 @@ class Hentai(RequestHandler):
         Return the cover URL of this `Hentai` object.
         """
         cover_ext = Extension.convert(self.json["images"]["cover"]["t"])
-        return f"https://t.nhentai.net/galleries/{self.media_id}/cover{cover_ext}"
+        cdn: int = get_random_cdn()
+        return f"https://t{cdn}.nhentai.net/galleries/{self.media_id}/cover{cover_ext}"
 
     @property
     def thumbnail(self) -> str:
@@ -233,7 +234,8 @@ class Hentai(RequestHandler):
         Return the thumbnail URL of this `Hentai` object.
         """
         thumb_ext = Extension.convert(self.json["images"]["thumbnail"]["t"])
-        return f"https://t.nhentai.net/galleries/{self.media_id}/thumb{thumb_ext}"
+        cdn: int = get_random_cdn()
+        return f"https://t{cdn}.nhentai.net/galleries/{self.media_id}/thumb{thumb_ext}"
 
     @property
     def epos(self) -> int:
@@ -351,14 +353,18 @@ class Hentai(RequestHandler):
         Return a collection of pages detailing URL, file extension, width and
         height of this `Hentai` object.
         """
-        pages = self.json["images"]["pages"]
-        extension = lambda num: Extension.convert(pages[num]["t"])
-        image_url = (
-            lambda num: f"https://i.nhentai.net/galleries/{self.media_id}/{num}{extension(num-1)}"
-        )
+        pages: list[dict[str, Any]] = self.json["images"]["pages"]
+        cdn: int = get_random_cdn()
+        base_url: str = f"https://i{cdn}.nhentai.net/galleries/{self.media_id}"
+
         return [
-            Page(image_url(num + 1), Extension.convert(_["t"]), _["w"], _["h"])
-            for num, _ in enumerate(pages)
+            Page(
+                f"{base_url}/{i + 1}{Extension.convert(pages[i]['t'])}",
+                Extension.convert(p["t"]),
+                p["w"],
+                p["h"],
+            )
+            for i, p in enumerate(pages)
         ]
 
     @property
@@ -385,23 +391,31 @@ class Hentai(RequestHandler):
         """
         Return a list of comments of this `Hentai` object.
         """
-        response = self.handler.get(urljoin(API_URL, f"{self.id}/comments")).json()
-        user = lambda u: User(
-            int(u["id"]),
-            u["username"],
-            u["slug"],
-            urljoin("i.nhentai.net/", u["avatar_url"]),
-            bool(u["is_superuser"]),
-            bool(u["is_staff"]),
-        )
-        comment = lambda c: Comment(
-            int(c["id"]),
-            int(c["gallery_id"]),
-            user(c["poster"]),
-            datetime.fromtimestamp(c["post_date"], tz=timezone.utc),
-            c["body"],
-        )
-        return [comment(data) for data in response]
+        response: list[dict[str, Any]] = self.handler.get(
+            urljoin(API_URL, f"{self.id}/comments")
+        ).json()
+        cdn: int = get_random_cdn()
+
+        def to_user(u: dict[str, Any]) -> User:
+            return User(
+                int(u["id"]),
+                u["username"],
+                u["slug"],
+                urljoin(f"i{cdn}.nhentai.net/", u["avatar_url"]),
+                bool(u["is_superuser"]),
+                bool(u["is_staff"]),
+            )
+
+        def to_comment(c: dict[str, Any]) -> Comment:
+            return Comment(
+                int(c["id"]),
+                int(c["gallery_id"]),
+                to_user(c["poster"]),
+                datetime.fromtimestamp(c["post_date"], tz=timezone.utc),
+                c["body"],
+            )
+
+        return [to_comment(c) for c in response]
 
     # endregion
 

@@ -26,6 +26,7 @@ lolis = search_by_query('tag:loli', sort=Sort.PopularWeek)
 import functools
 import json
 import platform
+from random import randint
 import sys
 import tarfile
 from pathlib import Path
@@ -76,6 +77,13 @@ def get_random_hentai(handler: RequestHandler = RequestHandler()) -> "Hentai":
     """
     from hentai.api.hentai import Hentai
     return Hentai(get_random_id(handler))
+
+
+def get_random_cdn() -> int:
+    """
+    Return a random CDN ID.
+    """
+    return randint(1, 4)
 
 
 def download(
