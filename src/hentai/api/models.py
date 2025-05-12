@@ -180,10 +180,11 @@ class Tag:
         ```
         """
         return next(
-            filter(
+            filter(  # type: ignore
                 lambda tag: getattr(tag, property_) == value,
                 Tag.list(option, local_=local_),
-            )
+            ),
+            None,
         )
 
 
