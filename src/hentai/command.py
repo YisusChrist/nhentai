@@ -1,12 +1,23 @@
 from argparse import Namespace
-from collections import namedtuple
 from pathlib import Path
-from typing import List
+from typing import NamedTuple
 
 from rich import print
 
 from hentai.api import Format, Hentai
 from hentai.logs import get_logfile_path
+
+
+class Entry(NamedTuple):
+    """
+    A data class that bundles related `Entry` properties.
+    """
+
+    timestamp: str
+    levelname: str
+    lineno: str
+    name: str
+    message: str
 
 
 def str2bool(val: str) -> bool:
@@ -16,7 +27,7 @@ def str2bool(val: str) -> bool:
     return val.lower() in ("", "y", "yes", "t", "true", "on", "1")
 
 
-def __print_dict(dictionary: dict, indent=4) -> None:
+def __print_dict(dictionary: dict[str, str | int], indent: int = 4) -> None:
     print(
         "{\n%s\n}"
         % "\n".join(
@@ -28,7 +39,7 @@ def __print_dict(dictionary: dict, indent=4) -> None:
     )
 
 
-def __from_file(path: Path) -> List[int]:
+def __from_file(path: Path) -> list[int]:
     with open(path, mode="r", encoding="utf-8") as file_handler:
         return [int(line.strip("#").rstrip()) for line in file_handler.readlines()]
 
@@ -50,7 +61,7 @@ def download_doujin(args: Namespace):
 def display_doujin_info(args: Namespace):
     for id_ in args.id:
         doujin = Hentai(id_)
-        values = [
+        values: list[str | int] = [
             doujin.title(Format.Pretty),
             doujin.artist[0].name,
             doujin.num_pages,
@@ -86,13 +97,10 @@ def handle_log_file(args: Namespace):
                 )
                 return
 
-            def _parse_line(line: str) -> List[str]:
+            def _parse_line(line: str) -> list[str]:
                 return line.strip("\n").split("::")
 
-            Entry = namedtuple("Entry", "timestamp levelname lineno name message")
-
-            tabulate = "{:<7} {:<8} {:<30} {:<30}".format
-
+            tabulate = "{:<24} {:<7} {:<8} {:<20} {:<30}".format
             print(
                 f'[green]{tabulate("Timestamp", "Line", "Level", "File Name", "Message")}[/]'
             )
@@ -108,6 +116,7 @@ def handle_log_file(args: Namespace):
                 )
                 print(
                     tabulate(
+                        entry.timestamp,
                         entry.lineno.zfill(4),
                         entry.levelname,
                         entry.name,

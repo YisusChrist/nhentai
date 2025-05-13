@@ -159,7 +159,13 @@ class Tag:
             int(count) if str(count).isnumeric() else int(count.strip("K")) * 1_000
         )
         return [
-            Tag(int(tag[0]), tag[1], tag[2], urljoin(HOME_URL, tag[3]), number(tag[4]))
+            Tag(
+                id=int(tag[0]),
+                type=tag[1],
+                name=tag[2],
+                url=urljoin(HOME_URL, tag[3]),
+                count=number(tag[4]),
+            )
             for tag in tags
         ]
 
@@ -278,6 +284,7 @@ class Option(Enum):
     Images = "image_urls"
     NumPages = "num_pages"
 
+    @staticmethod
     def all() -> list[Option]:
         """
         Return all available options with the exception of `Option.Raw`.
