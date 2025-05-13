@@ -35,6 +35,7 @@ from urllib.parse import urljoin, urlparse
 from zipfile import ZIP_DEFLATED, ZipFile
 
 from requests import HTTPError, Response
+from rich import print
 
 from hentai.api.models import Option
 from hentai.consts import HOME_URL

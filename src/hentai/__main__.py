@@ -24,15 +24,18 @@ import sys
 from argparse import Namespace
 
 from requests import HTTPError
+from rich import print
+from rich.traceback import install
 
 from hentai.cli import get_parsed_args, print_help
 from hentai.command import (display_doujin_info, download_doujin,
                             handle_log_file)
-from hentai.consts import COLORS, __version__
+from hentai.consts import __version__
 from hentai.logs import logger
 
 
 def main() -> None:
+    install()
     args: Namespace = get_parsed_args()
 
     try:
@@ -46,10 +49,10 @@ def main() -> None:
             print_help()
             sys.exit(errno.EINVAL)
     except HTTPError as error:
-        print(f"{COLORS['red']}ERROR:{COLORS['reset']} {error}", file=sys.stderr)
+        print(f"[red]ERROR:[/] {error}", file=sys.stderr)
         logger.error("CLI caught an HTTP error (network down?): %s" % str(error))
     except Exception as error:
-        print(f"{COLORS['red']}ERROR:{COLORS['reset']} {error}", file=sys.stderr)
+        print(f"[red]ERROR:[/] {error}", file=sys.stderr)
         logger.error("CLI caught an error: %s" % str(error))
 
 

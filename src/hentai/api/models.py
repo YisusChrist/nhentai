@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Union
 from urllib.parse import urljoin, urlparse
 
-from hentai.consts import COLORS, ERROR_VALUE, HOME_URL
+from hentai.consts import ERROR_VALUE, HOME_URL
 from hentai.requests import RequestHandler
 
 if TYPE_CHECKING:
@@ -104,7 +104,7 @@ class Tag:
         """
         if property_ not in Tag.__dict__.get("__dataclass_fields__").keys():
             raise ValueError(
-                f"{COLORS['red']}{ERROR_VALUE}: {property_} not recognized as a property in {cls.__name__}{COLORS['reset']}"
+                f"{ERROR_VALUE}: {property_} not recognized as a property in {cls.__name__}"
             )
         return ", ".join([getattr(tag, property_) for tag in tags])
 
@@ -143,13 +143,11 @@ class Tag:
             Option.Category,
         ]:
             raise ValueError(
-                f"{COLORS['red']}{ERROR_VALUE}: Invalid option ({option.name} is not an Tag object property){COLORS['reset']}"
+                f"{ERROR_VALUE}: Invalid option ({option.name} is not an Tag object property)"
             )
 
         if option is Option.Category:
-            raise NotImplementedError(
-                f"{COLORS['red']}This feature is not implemented yet{COLORS['reset']}"
-            )
+            raise NotImplementedError(f"This feature is not implemented yet")
 
         tags = _query_db(
             "tags.db",

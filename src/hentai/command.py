@@ -3,8 +3,9 @@ from collections import namedtuple
 from pathlib import Path
 from typing import List
 
+from rich import print
+
 from hentai.api import Format, Hentai
-from hentai.consts import COLORS
 from hentai.logs import get_logfile_path
 
 
@@ -20,8 +21,7 @@ def __print_dict(dictionary: dict, indent=4) -> None:
         "{\n%s\n}"
         % "\n".join(
             [
-                f"{COLORS['blue']}{indent * ' '}{key}{COLORS['reset']}: "
-                f"{COLORS['green']}{value}{COLORS['reset']},"
+                f"[blue]{indent * ' '}{key}[/]: " f"[green]{value}[/],"
                 for key, value in dictionary.items()
             ]
         )
@@ -38,7 +38,7 @@ def download_doujin(args: Namespace):
         doujin = Hentai(id_)
         if args.check and Path(args.dest).joinpath(str(doujin.id)).exists():
             print(
-                f"{COLORS['yellow']}WARNING:{COLORS['reset']} A file with the same name already exists in {str(args.dest)!r}."
+                f"[yellow]WARNING:[/] A file with the same name already exists in {str(args.dest)!r}."
             )
             choice = input("Proceed with download? [Y/n] ")
             if choice == "" or str2bool(choice):
@@ -81,8 +81,8 @@ def handle_log_file(args: Namespace):
 
             if not log:
                 print(
-                    f"{COLORS['yellow']}INFO:{COLORS['reset']} there is "
-                    "nothing to read because the log file is empty"
+                    f"[yellow]INFO:[/] There is nothing to read because the "
+                    "log file is empty"
                 )
                 return
 
@@ -94,9 +94,7 @@ def handle_log_file(args: Namespace):
             tabulate = "{:<7} {:<8} {:<30} {:<30}".format
 
             print(
-                COLORS["green"]
-                + tabulate("Line", "Level", "File Name", "Message")
-                + COLORS["reset"]
+                f'[green]{tabulate("Timestamp", "Line", "Level", "File Name", "Message")}[/]'
             )
 
             for line in log:

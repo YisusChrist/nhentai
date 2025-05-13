@@ -12,13 +12,14 @@ from urllib.parse import urljoin
 
 from requests import HTTPError
 from requests.models import Response
+from rich import print
 from tqdm import tqdm
 
 from hentai.api.models import (Comment, Extension, Format, Option, Page, Tag,
                                User)
 from hentai.api.progress import progressbar_options
 from hentai.api.utils import compress, export, get_random_cdn
-from hentai.consts import API_URL, COLORS, ERROR_VALUE, GALLERY_URL, HOME_URL
+from hentai.consts import API_URL, ERROR_VALUE, GALLERY_URL, HOME_URL
 from hentai.logs import logger
 from hentai.requests import RequestHandler
 
@@ -93,8 +94,8 @@ class Hentai(RequestHandler):
             self.__api = self.__get_api(self.json)
         else:
             raise TypeError(
-                f"{COLORS['red']}{ERROR_VALUE}: Define either id or json "
-                f"as argument, but not both or none{COLORS['reset']}"
+                f"{ERROR_VALUE}: Define either id or json as argument, but "
+                "not both or none"
             )
 
     def __str__(self) -> str:
@@ -486,7 +487,7 @@ class Hentai(RequestHandler):
 
         if Option.Raw in options:
             raise NotImplementedError(
-                f"{COLORS['red']}{ERROR_VALUE}: Access self.json to retrieve this information{COLORS['reset']}"
+                f"[red]{ERROR_VALUE}: Access self.json to retrieve this information[/]"
             )
 
         for option in options:
