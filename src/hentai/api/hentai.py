@@ -318,6 +318,37 @@ class Hentai(RequestHandler):
         return self.__tag(self.json, "category")
 
     @property
+    def details(self) -> dict[str, Any]:
+        """
+        Return all tags of type detail of this `Hentai` object.
+        """
+        details: dict[str, Any] = self.json.copy()
+
+        details.update(
+            {
+                "url": self.url,
+                "api": self.api,
+                "group": self.group,
+                "parody": self.parody,
+                "character": self.character,
+                "language": self.language,
+                "artist": self.artist,
+                "category": self.category,
+                "tags": self.tag,
+                "upload_date_dt": self.upload_date,
+                "related": self.related,
+                "thread": self.thread,
+            }
+        )
+        details["images"] = {
+            "pages": self.pages,
+            "cover": self.cover,
+            "thumbnail": self.thumbnail,
+        }
+
+        return details
+
+    @property
     def num_pages(self) -> int:
         """
         Return the total number of pages of this `Hentai` object.
