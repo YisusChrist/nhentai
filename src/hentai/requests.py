@@ -3,8 +3,9 @@ import platform
 from typing import Any
 from urllib.request import getproxies
 
-from requests import Response, Session
+from requests import Response
 from requests.adapters import HTTPAdapter
+from requests_cache import CachedResponse, CachedSession, OriginalResponse
 from urllib3 import Retry
 
 from hentai.consts import __version__, package_name
@@ -94,7 +95,7 @@ class RequestHandler(object):
         )
 
     @property
-    def session(self) -> Session:
+    def session(self) -> CachedSession:
         """
         Creates a custom session object. A request session provides cookie
         persistence, connection-pooling, and further configuration options
@@ -108,18 +109,18 @@ class RequestHandler(object):
             """
             response.raise_for_status()
 
-        session = Session()
+        session = CachedSession()
         session.mount("https://", HTTPAdapter(max_retries=self.retry_strategy))
         session.hooks["response"] = [_hook_response]
         session.headers.update({"User-Agent": self.user_agent or _build_ua_string()})
         return session
 
-    def get(self, url: str, **kwargs: Any) -> Response:
+    def get(self, url: str, **kwargs: Any) -> OriginalResponse | CachedResponse:
         """
         Returns the GET request encoded in `utf-8`. Adds proxies to this session
         on the fly if urllib is able to pick up the system's proxy settings.
         """
-        response = self.session.get(
+        response: OriginalResponse | CachedResponse = self.session.get(
             url, timeout=self.timeout, proxies=self.proxies or getproxies(), **kwargs
         )
         response.encoding = "utf-8"
