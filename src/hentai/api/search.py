@@ -9,6 +9,18 @@ from hentai.consts import HOME_URL
 from hentai.requests import RequestHandler
 
 
+def _search(
+    endpoint: str,
+    payload: dict[str, str | int],
+    handler: RequestHandler,
+) -> set[Hentai]:
+    """
+    Internal helper to search hentai data from a given API endpoint with payload.
+    """
+    with handler.get(urljoin(HOME_URL, endpoint), params=payload) as response:
+        return {Hentai(json=raw_json) for raw_json in response.json()["result"]}
+
+
 def search_by_query(
     query: str,
     page: int = 1,
@@ -20,10 +32,7 @@ def search_by_query(
     `query` sorted by `sort`.
     """
     payload: dict[str, str | int] = {"query": query, "page": page, "sort": sort.value}
-    with handler.get(
-        urljoin(HOME_URL, "api/galleries/search"), params=payload
-    ) as response:
-        return {Hentai(json=raw_json) for raw_json in response.json()["result"]}
+    return _search("api/galleries/search", payload, handler)
 
 
 def search_by_tag(
@@ -37,10 +46,7 @@ def search_by_tag(
     `id_` sorted by `sort`.
     """
     payload: dict[str, str | int] = {"tag_id": id_, "page": page, "sort": sort.value}
-    with handler.get(
-        urljoin(HOME_URL, "api/galleries/tagged"), params=payload
-    ) as response:
-        return {Hentai(json=raw_json) for raw_json in response.json()["result"]}
+    return _search("api/galleries/tagged", payload, handler)
 
 
 def search_all_by_query(
@@ -64,17 +70,19 @@ def search_all_by_query(
     """
     data: set[Hentai] = set()
     payload: dict[str, str | int] = {"query": query, "page": 1, "sort": sort.value}
-    with handler.get(
-        urljoin(HOME_URL, "/api/galleries/search"), params=payload
-    ) as response:
-        for page in tqdm(
-            **progressbar_options(
-                range(1, int(response.json()["num_pages"]) + 1),
-                "Search",
-                "page",
-                disable=progressbar,
-            )
-        ):
-            for doujin in search_by_query(query, page, sort, handler):
-                data.add(doujin)
+    endpoint = "api/galleries/search"
+
+    with handler.get(urljoin(HOME_URL, endpoint), params=payload) as response:
+        total_pages: int = int(response.json()["num_pages"]) + 1
+
+    for page in tqdm(
+        **progressbar_options(
+            range(1, total_pages),
+            "Search",
+            "page",
+            disable=progressbar,
+        )
+    ):
+        data.update(search_by_query(query, page, sort, handler))
+
     return data
