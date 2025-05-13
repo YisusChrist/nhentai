@@ -1,10 +1,10 @@
-from typing import Any, Iterable
+from typing import Any, Sized
 
 from hentai.consts import GREEN, RESET
 
 
 def progressbar_options(
-    iterable: Iterable[Any],
+    iterable: Sized,
     desc: str,
     unit: str,
     color: str = GREEN,

@@ -30,7 +30,7 @@ import sys
 import tarfile
 from pathlib import Path
 from random import randint
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Optional, Union
 from urllib.parse import urljoin, urlparse
 from zipfile import ZIP_DEFLATED, ZipFile
 
@@ -46,10 +46,10 @@ if TYPE_CHECKING:
     from hentai.api.hentai import Hentai
 
 
-def exists(error_msg: bool = False):
-    def decorator(func):
+def exists(error_msg: bool = False) -> Callable[..., Callable[[Any], Any]]:
+    def decorator(func: Callable[[Any], Any]) -> Callable[[Any], Any]:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any | None:
             try:
                 return func(*args, **kwargs)
             except HTTPError as error:
